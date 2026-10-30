@@ -5,9 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MainMenu.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/Home/MenuUtama.unity
+    guid: a2853d20dddefc54f8d50203f889eb79
+  - enabled: 1
+    path: Assets/Scenes/Home/PilihLevel.unity
+    guid: 3d445b70f583c624cb7a4178637be4b4
+  - enabled: 1
+    path: Assets/Scenes/Level1/Level1_Game.unity
+    guid: 67d151546e098c841adf077948a7adca
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
