@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro; // === TAMBAHAN UNTUK TEXTMESHPRO ===
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,6 +18,10 @@ public class PlayerController : MonoBehaviour
     private bool sedangMemungut = false;
     private bool gameDimulai = false;
 
+    // === TAMBAHAN VARIABEL SKOR ===
+    public int skor = 0;
+    public TextMeshProUGUI teksSkor;
+    // ==============================
 
     void Start()
     {
@@ -30,6 +35,10 @@ public class PlayerController : MonoBehaviour
         moveInput = Vector2.zero;
         sedangMemungut = false;
         gameDimulai = false;
+
+        // === TAMBAHAN TAMPILAN AWAL SKOR ===
+        UpdateTeksSkor();
+        // ===================================
 
         // AWAL GAME WAJIB IDLE
         anim.Play("Idle", 0, 0f);
@@ -304,6 +313,12 @@ public class PlayerController : MonoBehaviour
                     spriteRenderer.sortingOrder = 1;
 
 
+                    // === TAMBAHAN SKOR +10 ===
+                    skor += 10;
+                    UpdateTeksSkor();
+                    // =========================
+
+
                     // Tetap Walk sesuai arah terakhir
                     if (arahHadap == "Kanan")
                     {
@@ -331,6 +346,17 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+
+    // === TAMBAHAN FUNGSI UPDATE UI TEKS SKOR ===
+    void UpdateTeksSkor()
+    {
+        if (teksSkor != null)
+        {
+            teksSkor.text = skor.ToString();
+        }
+    }
+    // ===========================================
 
 
     // =====================================================
