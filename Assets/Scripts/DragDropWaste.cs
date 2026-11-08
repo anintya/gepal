@@ -4,9 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(WasteItem))]
 public class DragDropWaste : MonoBehaviour
 {
-    [Header("Drag Settings")]
-    [SerializeField] private bool returnToStartIfIncorrect = true;
-
     private Camera mainCamera;
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
@@ -37,14 +34,13 @@ public class DragDropWaste : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (mainCamera == null)
-        {
-            Debug.LogError("Main Camera tidak ditemukan!");
+        // JIKA GAME SUDAH SELESAI (Kalah/Menang), sampah tidak bisa di-drag lagi!
+        if (GameManager.instance != null && GameManager.instance.gameSelesai)
             return;
-        }
+
+        if (mainCamera == null) return;
 
         Vector3 pointerWorld = GetPointerWorldPosition();
-
         dragOffset = transform.position - pointerWorld;
         isDragging = true;
 
@@ -60,16 +56,20 @@ public class DragDropWaste : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (!isDragging || mainCamera == null)
+        if (GameManager.instance != null && GameManager.instance.gameSelesai)
             return;
+
+        if (!isDragging || mainCamera == null) return;
 
         transform.position = GetPointerWorldPosition() + dragOffset;
     }
 
     private void OnMouseUp()
     {
-        if (!isDragging)
+        if (GameManager.instance != null && GameManager.instance.gameSelesai)
             return;
+
+        if (!isDragging) return;
 
         isDragging = false;
 
@@ -80,63 +80,45 @@ public class DragDropWaste : MonoBehaviour
             rb.simulated = true;
 
         Vector3 dropPosition = GetPointerWorldPosition();
-
-        // Cari semua collider pada titik sampah dilepaskan
-        Collider2D[] hitColliders =
-            Physics2D.OverlapPointAll(dropPosition);
+        Collider2D[] hitColliders = Physics2D.OverlapPointAll(dropPosition);
 
         WasteBin targetBin = null;
 
         foreach (Collider2D hit in hitColliders)
         {
-            if (hit == null)
-                continue;
+            if (hit == null) continue;
 
-            // Cari WasteBin pada collider atau parent
             targetBin = hit.GetComponent<WasteBin>();
-
             if (targetBin == null)
                 targetBin = hit.GetComponentInParent<WasteBin>();
 
-            if (targetBin != null)
-                break;
+            if (targetBin != null) break;
         }
 
         if (targetBin == null)
         {
-            Debug.Log("Sampah tidak dilepaskan di atas tong.");
             ReturnToStart();
             return;
         }
 
+        // JIKA MASUK TONG YANG BENAR (+10 Skor)
         if (targetBin.Accepts(wasteItem))
         {
-            Debug.Log(
-                "Sampah benar! " +
-                wasteItem.category +
-                " masuk ke tong " +
-                targetBin.acceptedCategory
-            );
-
-            if (ScoreManager.Instance != null)
+            if (GameManager.instance != null)
             {
-                ScoreManager.Instance.AddPoint();
-            }
-            else
-            {
-                Debug.LogWarning("ScoreManager belum ditemukan!");
+                GameManager.instance.TambahSkor(10);
             }
 
             Destroy(gameObject);
         }
+        // JIKA SALAH MASUK TONG (-10 Skor & -1 Nyawa)
         else
         {
-            Debug.Log(
-                "Kategori salah! Sampah: " +
-                wasteItem.category +
-                ", Tong: " +
-                targetBin.acceptedCategory
-            );
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.KurangiSkor(10);
+                GameManager.instance.KurangNyawa();
+            }
 
             ReturnToStart();
         }
@@ -145,15 +127,9 @@ public class DragDropWaste : MonoBehaviour
     private Vector3 GetPointerWorldPosition()
     {
         Vector3 pointerPosition = Input.mousePosition;
-
-        pointerPosition.z =
-            Mathf.Abs(mainCamera.transform.position.z);
-
-        Vector3 worldPosition =
-            mainCamera.ScreenToWorldPoint(pointerPosition);
-
+        pointerPosition.z = Mathf.Abs(mainCamera.transform.position.z);
+        Vector3 worldPosition = mainCamera.ScreenToWorldPoint(pointerPosition);
         worldPosition.z = transform.position.z;
-
         return worldPosition;
     }
 
