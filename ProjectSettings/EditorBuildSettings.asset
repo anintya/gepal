@@ -17,6 +17,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level1/Level1_Game.unity
     guid: 67d151546e098c841adf077948a7adca
+  - enabled: 1
+    path: Assets/Scenes/Level1/Level1_Materi.unity
+    guid: 35869bb4a97a86d4dbb4e5a79ba93144
+  - enabled: 1
+    path: Assets/Scenes/Level1/Level1_Tugas.unity
+    guid: 8a58c53d6f2379a44b7a19fbe90090fc
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

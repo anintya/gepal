@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3023c60be49370647a8be07a2abdffbf
+guid: 6b63754c165fb984bbfd47c97ed93897
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7528152379277616595
-    second: Diam_0
+      213: 8396990912447483483
+    second: 0a72f79c-debc-4b9f-952a-e0775c6c63ac_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Diam_0
+      name: 0a72f79c-debc-4b9f-952a-e0775c6c63ac_0
       rect:
         serializedVersion: 2
-        x: 48
-        y: 23
-        width: 1208
-        height: 1841
+        x: 0
+        y: 0
+        width: 1671
+        height: 941
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3d5aaddf3be597860800000000000000
-      internalID: 7528152379277616595
+      spriteID: b5e8d96eeba188470800000000000000
+      internalID: 8396990912447483483
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Diam_0: 7528152379277616595
+      0a72f79c-debc-4b9f-952a-e0775c6c63ac_0: 8396990912447483483
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -51,6 +51,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // Jika game selesai (Game Over / Menang), hentikan gerakan pemain
+        if (GameManager.instance != null && GameManager.instance.gameSelesai)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
         // ==========================================
         // BELUM ADA TOMBOL DITEKAN = TETAP IDLE
         // ==========================================
@@ -140,6 +147,7 @@ public class PlayerController : MonoBehaviour
 
     public void TekanKanan()
     {
+        if (GameManager.instance != null && GameManager.instance.gameSelesai) return;
         MulaiGame();
 
         // SELALU ubah arah ke kanan
@@ -163,6 +171,7 @@ public class PlayerController : MonoBehaviour
 
     public void TekanKiri()
     {
+        if (GameManager.instance != null && GameManager.instance.gameSelesai) return;
         MulaiGame();
 
         // SELALU ubah arah ke kiri
@@ -186,6 +195,7 @@ public class PlayerController : MonoBehaviour
 
     public void TekanAtas()
     {
+        if (GameManager.instance != null && GameManager.instance.gameSelesai) return;
         MulaiGame();
 
         moveInput = new Vector2(0, 1);
@@ -210,6 +220,7 @@ public class PlayerController : MonoBehaviour
 
     public void TekanBawah()
     {
+        if (GameManager.instance != null && GameManager.instance.gameSelesai) return;
         MulaiGame();
 
         moveInput = new Vector2(0, -1);
@@ -342,6 +353,31 @@ public class PlayerController : MonoBehaviour
                     Debug.Log(
                         "Oops! Salah memasukkan jenis tong sampah!"
                     );
+
+                    // Kurangi skor dan nyawa saat salah memasukkan tong
+                    if (GameManager.instance != null)
+                    {
+                        GameManager.instance.KurangiSkor(10);
+                        GameManager.instance.KurangNyawa();
+                    }
+
+                    if (teksSkor != null && GameManager.instance != null)
+                    {
+                        skor = GameManager.instance.skor;
+                        UpdateTeksSkor();
+                    }
+
+                    // Lepas sampah yang dibawa dan kembalikan ke lantai
+                    if (sampahYangDibawa != null)
+                    {
+                        sampahYangDibawa.transform.SetParent(null);
+                        Collider2D colSampah = sampahYangDibawa.GetComponent<Collider2D>();
+                        if (colSampah != null) colSampah.enabled = true;
+                        SpriteRenderer sampahSR = sampahYangDibawa.GetComponent<SpriteRenderer>();
+                        if (sampahSR != null) sampahSR.sortingOrder = 1;
+                        sampahYangDibawa = null;
+                        spriteRenderer.sortingOrder = 1;
+                    }
                 }
             }
         }
