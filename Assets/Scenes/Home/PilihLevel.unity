@@ -1126,7 +1126,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1528935613}
         m_TargetAssemblyTypeName: PindahScene, Assembly-CSharp
-        m_MethodName: KeLevel1Game
+        m_MethodName: KeLevel1Cutscene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
