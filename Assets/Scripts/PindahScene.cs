@@ -5,6 +5,16 @@ using UnityEngine.SceneManagement;
 public class PindahScene : MonoBehaviour
 {
     // =========================================
+    // PINDAH KE SCENE INPUT NAMA
+    // =========================================
+
+    public void KeInputNama()
+    {
+        SceneManager.LoadScene("InputNama");
+    }
+
+
+    // =========================================
     // PINDAH KE SCENE PILIH LEVEL
     // =========================================
 

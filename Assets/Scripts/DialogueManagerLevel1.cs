@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -176,6 +177,49 @@ public class DialogueManagerLevel1 : MonoBehaviour
         {
             nextButtonImage.sprite = nextButtonSprite;
         }
+
+        RapikanTataLetakTeksDialog();
+    }
+
+
+    // =========================================
+    // RAPIKAN KOTAK TEKS & NAMA SECARA OTOMATIS
+    // =========================================
+
+    private void RapikanTataLetakTeksDialog()
+    {
+        // 1. Rapikan properti teks dialog Raka (tanpa mengubah posisi/ukuran RectTransform dari Inspector)
+        if (rakaDialogText != null)
+        {
+            rakaDialogText.margin = Vector4.zero;
+            rakaDialogText.textWrappingMode = TextWrappingModes.Normal;
+            rakaDialogText.overflowMode = TextOverflowModes.Overflow;
+        }
+
+        // 2. Rapikan properti teks dialog Gepi (tanpa mengubah posisi/ukuran RectTransform dari Inspector)
+        if (gepiDialogText != null)
+        {
+            gepiDialogText.margin = Vector4.zero;
+            gepiDialogText.textWrappingMode = TextWrappingModes.Normal;
+            gepiDialogText.overflowMode = TextOverflowModes.Overflow;
+        }
+
+        // 3. Rapikan label nama Pemain (RakaNameText) agar tidak turun baris jika namanya panjang
+        if (rakaNameText != null)
+        {
+            rakaNameText.margin = Vector4.zero;
+            rakaNameText.textWrappingMode = TextWrappingModes.NoWrap;
+            rakaNameText.enableAutoSizing = true;
+            rakaNameText.fontSizeMin = 18f;
+            rakaNameText.fontSizeMax = 36f;
+        }
+
+        // 4. Rapikan label nama Gepi (GepiNameText)
+        if (gepiNameText != null)
+        {
+            gepiNameText.margin = Vector4.zero;
+            gepiNameText.textWrappingMode = TextWrappingModes.NoWrap;
+        }
     }
 
 
@@ -344,8 +388,14 @@ public class DialogueManagerLevel1 : MonoBehaviour
         // NAMA KARAKTER
         // -------------------------------------
 
+        string namaPemain = PlayerPrefs.GetString("NamaPemain", "Raka").Trim();
+        if (string.IsNullOrEmpty(namaPemain))
+        {
+            namaPemain = "Raka";
+        }
+
         if (rakaNameText != null)
-            rakaNameText.text = rakaSpeaking ? "RAKA" : "";
+            rakaNameText.text = rakaSpeaking ? namaPemain.ToUpper() : "";
 
         if (gepiNameText != null)
             gepiNameText.text = gepiSpeaking ? "GEPI" : "";
@@ -404,10 +454,11 @@ public class DialogueManagerLevel1 : MonoBehaviour
 
 
         // -------------------------------------
-        // JALANKAN TYPEWRITER
+        // JALANKAN TYPEWRITER (SESUAIKAN NAMA PEMAIN)
         // -------------------------------------
 
-        MulaiEfekMengetik(data.isiDialog);
+        string kalimatDialog = SesuaikanNamaPemain(data.isiDialog, namaPemain);
+        MulaiEfekMengetik(kalimatDialog);
 
 
         Debug.Log(
@@ -415,6 +466,32 @@ public class DialogueManagerLevel1 : MonoBehaviour
             "/" + daftarDialog.Count +
             " | Pembicara: " + data.pembicara
         );
+    }
+
+
+    // =========================================
+    // SESUAIKAN NAMA PEMAIN DI TEKS DIALOG
+    // =========================================
+
+    private string SesuaikanNamaPemain(string teksAsli, string namaPemain)
+    {
+        if (string.IsNullOrEmpty(teksAsli))
+            return "";
+
+        // Gunakan Regex \b (word boundary) agar hanya mengganti kata utuh "Raka"
+        // dan tidak mengubah kata seperti "berserakan" atau "gerakan"
+        string hasil = teksAsli
+            .Replace("{nama}", namaPemain)
+            .Replace("{Nama}", namaPemain)
+            .Replace("{NAMA}", namaPemain.ToUpper());
+
+        hasil = Regex.Replace(hasil, @"\bRaka\b", namaPemain);
+        hasil = Regex.Replace(hasil, @"\bRAKA\b", namaPemain.ToUpper());
+
+        // Rapikan enter/baris baru atau spasi ganda dari Inspector agar kalimat mengalir rapi
+        hasil = Regex.Replace(hasil, @"\s+", " ").Trim();
+
+        return hasil;
     }
 
 
